@@ -12,7 +12,6 @@ def generate_random_code(length=8):
 
 @router.post("/generate-code", response_model=CodeResponse)
 async def generate_code(request: CodeCreate):
-    # Ensure unique code
     max_retries = 5
     for _ in range(max_retries):
         code = generate_random_code()

@@ -4,7 +4,7 @@ from datetime import datetime
 from app.models.enum import UserRole, UserStatus
 
 class UserCreate(BaseModel):
-    """Schema for user signup/registration"""
+    
     full_name: str = Field(..., min_length=2, description="Full name of the user")
     email: EmailStr = Field(..., description="Email address")
     mobile_number: str = Field(..., description="Mobile number (10 digits)")
@@ -25,7 +25,6 @@ class UserCreate(BaseModel):
     @field_validator('mobile_number')
     @classmethod
     def validate_mobile_number(cls, v: str) -> str:
-        # Remove any spaces or dashes
         cleaned = v.replace(' ', '').replace('-', '')
         if not cleaned.isdigit():
             raise ValueError('Mobile number must contain only digits')
@@ -68,9 +67,8 @@ class UserCreate(BaseModel):
             }
         }
 
-
 class UserLogin(BaseModel):
-    """Schema for user login"""
+    
     email: EmailStr = Field(..., description="Email address")
     password: str = Field(..., description="Password")
     
@@ -82,9 +80,8 @@ class UserLogin(BaseModel):
             }
         }
 
-
 class UserResponse(BaseModel):
-    """Schema for user response (without password)"""
+    
     id: str = Field(..., alias="_id", description="User ID")
     full_name: str
     email: EmailStr
@@ -114,22 +111,19 @@ class UserResponse(BaseModel):
             }
         }
 
-
 class Token(BaseModel):
-    """Schema for JWT token"""
+    
     access_token: str
     token_type: str = "bearer"
 
-
 class TokenData(BaseModel):
-    """Schema for token payload data"""
+    
     email: Optional[str] = None
     user_id: Optional[str] = None
     role: Optional[str] = None
 
-
 class LoginResponse(BaseModel):
-    """Schema for login response"""
+    
     access_token: str
     token_type: str = "bearer"
     user: UserResponse

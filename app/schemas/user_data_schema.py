@@ -3,7 +3,7 @@ from typing import Optional, List
 from datetime import datetime
 
 class EducationItem(BaseModel):
-    """Schema for education entry"""
+    
     degree: Optional[str] = None
     institution: Optional[str] = None
     year: Optional[str] = None
@@ -17,9 +17,8 @@ class EducationItem(BaseModel):
             }
         }
 
-
 class ExperienceItem(BaseModel):
-    """Schema for experience entry"""
+    
     company: Optional[str] = None
     role: Optional[str] = None
     duration: Optional[str] = None
@@ -35,9 +34,8 @@ class ExperienceItem(BaseModel):
             }
         }
 
-
 class ParsedResumeData(BaseModel):
-    """Schema for parsed resume data"""
+    
     fullName: Optional[str] = None
     email: Optional[str] = None
     phone: Optional[str] = None
@@ -48,9 +46,8 @@ class ParsedResumeData(BaseModel):
     totalExperienceYears: Optional[float] = None
     rawResumeText: str
 
-
 class ParseResumeRequest(BaseModel):
-    """Schema for parse resume request"""
+    
     applicantId: str = Field(..., description="Applicant ID to parse resume for")
     
     class Config:
@@ -60,9 +57,8 @@ class ParseResumeRequest(BaseModel):
             }
         }
 
-
 class ParseResumeResponse(BaseModel):
-    """Schema for parse resume response"""
+    
     id: str = Field(..., alias="_id", description="User data ID")
     applicantId: str
     fullName: Optional[str] = None

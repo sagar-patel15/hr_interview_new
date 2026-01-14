@@ -3,8 +3,7 @@ from typing import Optional
 from bson import ObjectId
 
 class Applicant:
-    """Applicant model for MongoDB with Motor"""
-    
+
     def __init__(
         self,
         jobId: str,
@@ -24,7 +23,7 @@ class Applicant:
         self.createdAt = createdAt or datetime.utcnow()
     
     def to_dict(self) -> dict:
-        """Convert applicant object to dictionary for MongoDB"""
+        
         return {
             "_id": self._id,
             "jobId": self.jobId,
@@ -37,7 +36,7 @@ class Applicant:
     
     @staticmethod
     def from_dict(data: dict) -> 'Applicant':
-        """Create applicant object from MongoDB document"""
+        
         return Applicant(
             _id=data.get("_id"),
             jobId=data["jobId"],

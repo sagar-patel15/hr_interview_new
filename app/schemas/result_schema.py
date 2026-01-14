@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional, Union
 
 class ResultCreate(BaseModel):
-    """Schema for creating an interview result"""
+    
     fullName: str = Field(..., min_length=2)
     appliedRole: str
     interviewDate: Union[datetime, str]  # Can be datetime or string like "Not discussed"
@@ -67,9 +67,8 @@ class ResultCreate(BaseModel):
             }
         }
 
-
 class ResultResponse(BaseModel):
-    """Schema for result response"""
+    
     id: str = Field(..., alias="_id")
     fullName: str
     appliedRole: str

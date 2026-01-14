@@ -5,8 +5,7 @@ from pydantic import Field
 from app.models.enum import UserRole, UserStatus
 
 class User:
-    """User model for MongoDB with Motor"""
-    
+
     def __init__(
         self,
         full_name: str,
@@ -34,7 +33,7 @@ class User:
         self.updated_at = updated_at or datetime.utcnow()
     
     def to_dict(self) -> dict:
-        """Convert user object to dictionary for MongoDB"""
+        
         return {
             "_id": self._id,
             "full_name": self.full_name,
@@ -51,7 +50,7 @@ class User:
     
     @staticmethod
     def from_dict(data: dict) -> 'User':
-        """Create user object from MongoDB document"""
+        
         return User(
             _id=data.get("_id"),
             full_name=data["full_name"],

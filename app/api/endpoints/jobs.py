@@ -13,7 +13,6 @@ async def create_job(
 ):
     try:
         job = await JobService.create_job(job_data, str(current_user["_id"]))
-        # Convert ObjectId to string for response
         job["_id"] = str(job["_id"])
         job["createdBy"] = str(job["createdBy"])
         return job
@@ -25,17 +24,11 @@ async def create_job(
             detail=f"An error occurred while creating job: {str(e)}"
         )
 
-
 @router.get("/", response_model=List[JobResponse])
 async def get_all_jobs():
-    """
-    Get all jobs
     
-    Public endpoint - no authentication required
-    """
     try:
         jobs = await JobService.get_all_jobs()
-        # Convert ObjectIds to strings
         for job in jobs:
             job["_id"] = str(job["_id"])
             job["createdBy"] = str(job["createdBy"])
@@ -46,14 +39,9 @@ async def get_all_jobs():
             detail=f"An error occurred while fetching jobs: {str(e)}"
         )
 
-
 @router.get("/{job_id}", response_model=JobResponse)
 async def get_job(job_id: str):
-    """
-    Get job by ID
     
-    Public endpoint - no authentication required
-    """
     job = await JobService.get_job_by_id(job_id)
     if not job:
         raise HTTPException(
@@ -61,11 +49,9 @@ async def get_job(job_id: str):
             detail="Job not found"
         )
     
-    # Convert ObjectIds to strings
     job["_id"] = str(job["_id"])
     job["createdBy"] = str(job["createdBy"])
     return job
-
 
 @router.delete("/{job_id}", status_code=status.HTTP_200_OK)
 async def delete_job(
@@ -74,7 +60,6 @@ async def delete_job(
 ):
 
     try:
-        # Check if job exists first
         job = await JobService.get_job_by_id(job_id)
         if not job:
             raise HTTPException(

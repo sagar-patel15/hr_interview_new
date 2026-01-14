@@ -3,8 +3,7 @@ from typing import Optional
 from bson import ObjectId
 
 class Result:
-    """Interview result model for MongoDB with Motor"""
-    
+
     def __init__(
         self,
         fullName: str,
@@ -70,7 +69,7 @@ class Result:
         self.createdAt = createdAt or datetime.utcnow()
     
     def to_dict(self) -> dict:
-        """Convert result object to dictionary for MongoDB"""
+        
         return {
             "_id": self._id,
             "fullName": self.fullName,
@@ -106,7 +105,7 @@ class Result:
     
     @staticmethod
     def from_dict(data: dict) -> 'Result':
-        """Create result object from MongoDB document"""
+        
         return Result(
             _id=data.get("_id"),
             fullName=data["fullName"],

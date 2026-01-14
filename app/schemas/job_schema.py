@@ -4,7 +4,7 @@ from datetime import datetime
 from app.models.enum import EmploymentType, WorkMode
 
 class JobCreate(BaseModel):
-    """Schema for creating a job (admin only)"""
+    
     jobTitle: str = Field(..., min_length=3, description="Job title")
     jobDescription: str = Field(..., min_length=50, description="Full job description")
     employmentType: EmploymentType = Field(..., description="Employment type")
@@ -54,9 +54,8 @@ class JobCreate(BaseModel):
             }
         }
 
-
 class JobResponse(BaseModel):
-    """Schema for job response"""
+    
     id: str = Field(..., alias="_id", description="Job ID")
     jobTitle: str
     jobDescription: str

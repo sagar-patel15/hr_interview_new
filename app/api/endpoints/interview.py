@@ -11,7 +11,6 @@ from datetime import datetime
 
 router = APIRouter()
 
-# Ensure recordings directory exists
 RECORDINGS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "recordings")
 os.makedirs(RECORDINGS_DIR, exist_ok=True)
 
@@ -25,7 +24,6 @@ async def validate_code(request: CodeValidate):
     if code_doc["is_used"]:
         return ValidationResponse(valid=False, message="This code has already been used")
     
-    # Mark as used
     await db.db.login_codes.update_one(
         {"code": request.code},
         {
@@ -51,10 +49,7 @@ retell = Retell(api_key=settings.RETELL_API_KEY)
 @router.post("/retell/create-web-call")
 async def create_retell_web_call():
     try:
-        # Check if API key is set
         if not settings.RETELL_API_KEY:
-            # Fallback to the proxy if API key is not provided, 
-            # but warn that this is not the official way.
             async with httpx.AsyncClient() as client:
                 response = await client.post(
                     "https://agent.intelligens.app/api/retell/create-web-call",
@@ -67,7 +62,6 @@ async def create_retell_web_call():
                     )
                 return response.json()
 
-        # Official Retell SDK call
         call_response = retell.call.create_web_call(
             agent_id="agent_9f1f95bdc1e8caef6c4d35080a"
         )
@@ -91,17 +85,14 @@ async def save_recording(
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"{candidate_name}_{timestamp}.mp4"
         
-        # Initialize GridFS
         fs = AsyncIOMotorGridFSBucket(db.db)
         
-        # Upload to GridFS
         file_id = await fs.upload_from_stream(
             filename,
             file.file,
             metadata={"candidate_name": candidate_name, "uid": uid}
         )
         
-        # Save metadata to MongoDB
         recording_doc = {
             "candidate_name": candidate_name,
             "uid": uid,
@@ -112,7 +103,6 @@ async def save_recording(
         result = await db.db.video_recording.insert_one(recording_doc)
         recording_id = str(result.inserted_id)
         
-        # Unique URL for the recording
         recording_url = f"/api/recordings/{recording_id}"
         
         await db.db.video_recording.update_one(
@@ -135,15 +125,12 @@ async def save_recording(
 @router.get("/recordings/{recording_id}")
 async def get_recording(recording_id: str):
     try:
-        # Get metadata
         recording = await db.db.video_recording.find_one({"_id": ObjectId(recording_id)})
         if not recording:
             raise HTTPException(status_code=404, detail="Recording not found")
         
-        # Initialize GridFS
         fs = AsyncIOMotorGridFSBucket(db.db)
         
-        # Open download stream
         grid_out = await fs.open_download_stream(recording["gridfs_id"])
         
         return StreamingResponse(
@@ -160,7 +147,6 @@ async def get_recording(recording_id: str):
 @router.get("/recordings")
 async def list_recordings():
     try:
-        # Get all recordings from MongoDB
         recordings = []
         cursor = db.db.video_recording.find().sort("created_at", -1)
         
@@ -184,15 +170,12 @@ async def list_recordings():
 @router.delete("/recordings/{recording_id}")
 async def delete_recording(recording_id: str):
     try:
-        # Get recording metadata
         recording = await db.db.video_recording.find_one({"_id": ObjectId(recording_id)})
         if not recording:
             raise HTTPException(status_code=404, detail="Recording not found")
         
-        # Initialize GridFS
         fs = AsyncIOMotorGridFSBucket(db.db)
         
-        # Delete file from GridFS
         gridfs_id = recording.get("gridfs_id")
         if gridfs_id:
             try:
@@ -200,7 +183,6 @@ async def delete_recording(recording_id: str):
             except Exception as e:
                 print(f"Warning: Failed to delete GridFS file: {e}")
         
-        # Delete metadata from MongoDB
         await db.db.video_recording.delete_one({"_id": ObjectId(recording_id)})
         
         return {

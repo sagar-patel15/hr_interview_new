@@ -16,7 +16,6 @@ async def apply_for_job(
 ):
 
     try:
-        # Validate LinkedIn URL if provided
         validated_url = None
         if linkedinUrl:
             try:
@@ -27,10 +26,8 @@ async def apply_for_job(
                     detail="Invalid LinkedIn URL format"
                 )
         
-        # Create applicant data
         applicant_data = ApplicantCreate(linkedinUrl=validated_url)
         
-        # Create application with admin ID from token
         applicant = await ApplicantService.create_application(
             job_id,
             applicant_data,
@@ -38,9 +35,7 @@ async def apply_for_job(
             str(current_user["_id"])  # Pass admin ID from JWT token
         )
         
-        # Convert ObjectIds to strings
         applicant["_id"] = str(applicant["_id"])
-        # jobId is already a string, no conversion needed
         
         return applicant
     except HTTPException:

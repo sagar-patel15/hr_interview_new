@@ -3,8 +3,7 @@ from typing import Optional, List
 from bson import ObjectId
 
 class UserData:
-    """User data model for parsed resume information"""
-    
+
     def __init__(
         self,
         applicantId: ObjectId,
@@ -36,7 +35,7 @@ class UserData:
         self.createdAt = createdAt or datetime.utcnow()
     
     def to_dict(self) -> dict:
-        """Convert user data object to dictionary for MongoDB"""
+        
         return {
             "_id": self._id,
             "applicantId": self.applicantId,
@@ -55,7 +54,7 @@ class UserData:
     
     @staticmethod
     def from_dict(data: dict) -> 'UserData':
-        """Create user data object from MongoDB document"""
+        
         return UserData(
             _id=data.get("_id"),
             applicantId=data["applicantId"],

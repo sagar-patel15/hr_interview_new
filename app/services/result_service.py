@@ -5,12 +5,10 @@ from fastapi import HTTPException, status
 from typing import List
 
 class ResultService:
-    """Service for interview result operations"""
-    
+
     @staticmethod
     async def create_result(result_data: ResultCreate) -> dict:
-        """Create a new interview result"""
-        # Create result object
+        
         result = Result(
             fullName=result_data.fullName,
             appliedRole=result_data.appliedRole,
@@ -42,24 +40,22 @@ class ResultService:
             weaknesses=result_data.weaknesses
         )
         
-        # Insert into database
         results_collection = db.db["results"]
         insert_result = await results_collection.insert_one(result.to_dict())
         
-        # Get the created result
         created_result = await results_collection.find_one({"_id": insert_result.inserted_id})
         return created_result
     
     @staticmethod
     async def get_all_results() -> List[dict]:
-        """Get all interview results"""
+        
         results_collection = db.db["results"]
         results = await results_collection.find().to_list(length=1000)
         return results
     
     @staticmethod
     async def get_result_by_id(result_id: str) -> dict:
-        """Get result by ID"""
+        
         from bson import ObjectId
         
         if not ObjectId.is_valid(result_id):

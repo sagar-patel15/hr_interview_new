@@ -8,7 +8,6 @@ class Settings(BaseSettings):
     GENERATE_CODE_BASE_URL: str = "http://localhost:8000"
     INTERVIEW_FRONTEND_URL: str = "http://localhost:8000/interview.html"
     
-    # JWT Authentication Settings
     SECRET_KEY: str = "your-secret-key-change-this-in-production"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30

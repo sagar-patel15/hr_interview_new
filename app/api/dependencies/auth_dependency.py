@@ -9,7 +9,7 @@ from typing import Optional
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
-    """Get current user from JWT token"""
+    
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -38,9 +38,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
     
     return user
 
-
 async def require_admin(current_user: dict = Depends(get_current_user)) -> dict:
-    """Ensure current user is an admin"""
+    
     if current_user.get("role") != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

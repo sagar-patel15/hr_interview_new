@@ -9,7 +9,6 @@ async def signup(user_data: UserCreate):
 
     try:
         user = await AuthService.create_user(user_data)
-        # Convert ObjectId to string for response
         user["_id"] = str(user["_id"])
         return user
     except HTTPException:
@@ -22,11 +21,7 @@ async def signup(user_data: UserCreate):
 
 @router.post("/login", response_model=LoginResponse)
 async def login(login_data: UserLogin):
-    """
-    Login with email and password
     
-    Returns JWT access token and user information
-    """
     try:
         result = await AuthService.login_user(login_data)
         return result

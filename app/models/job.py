@@ -4,8 +4,7 @@ from bson import ObjectId
 from app.models.enum import EmploymentType, WorkMode
 
 class Job:
-    """Job model for MongoDB with Motor"""
-    
+
     def __init__(
         self,
         jobTitle: str,
@@ -34,7 +33,7 @@ class Job:
         self.deletedAt = None
     
     def to_dict(self) -> dict:
-        """Convert job object to dictionary for MongoDB"""
+        
         return {
             "_id": self._id,
             "jobTitle": self.jobTitle,
@@ -52,7 +51,7 @@ class Job:
     
     @staticmethod
     def from_dict(data: dict) -> 'Job':
-        """Create job object from MongoDB document"""
+        
         job = Job(
             _id=data.get("_id"),
             jobTitle=data["jobTitle"],

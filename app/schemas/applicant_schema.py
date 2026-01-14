@@ -3,7 +3,7 @@ from typing import Optional
 from datetime import datetime
 
 class ApplicantCreate(BaseModel):
-    """Schema for creating an application"""
+    
     linkedinUrl: Optional[HttpUrl] = Field(None, description="LinkedIn profile URL (optional)")
     
     class Config:
@@ -13,9 +13,8 @@ class ApplicantCreate(BaseModel):
             }
         }
 
-
 class ApplicantResponse(BaseModel):
-    """Schema for applicant response"""
+    
     id: str = Field(..., alias="_id", description="Application ID")
     jobId: str
     jobTitle: str
